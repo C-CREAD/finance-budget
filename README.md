@@ -48,7 +48,7 @@ Each income and expense will have its amounts and categories, while the budget w
    To delete the income/expense, the user must enter the ID number of the record. A table will display all valid records to choose from.
 
 ![image](https://github.com/user-attachments/assets/31b1bd53-e788-4eba-8455-ca3baa17ff89)
-![image](https://github.com/user-attachments/assets/8cba20dc-335c-4602-b6dc-182de0b723b6)
+![image](https://github.com/user-attachments/assets/10efe2ee-103e-4d18-865f-1f4b2e239066)
 
    
 8. Creating Budgets
@@ -75,12 +75,15 @@ Each income and expense will have its amounts and categories, while the budget w
 ![image](https://github.com/user-attachments/assets/c8b39f6c-c614-4b03-839d-707ccbcb1976)
 
 Income Table:
+
 ![image](https://github.com/user-attachments/assets/a058f742-85b3-489c-b60c-9f75595d9479)
 
 Expense Table:
+
 ![image](https://github.com/user-attachments/assets/4b27ff19-800c-4c83-a259-6eac68fa926f)
 
 Budget Table:
+
 ![image](https://github.com/user-attachments/assets/0ed0ee51-633c-4552-9018-78bba35759ea)
 
     
