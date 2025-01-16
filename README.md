@@ -7,6 +7,24 @@ This mini-project is a terminal program that will let users to create different 
 The user can create, update, and delete incomes and expenses but can only create and update budgets. The user can also view the incomes, expenses, and budgets in a table format for neatness and readability.
 Each income and expense will have its amounts and categories, while the budget will have an initial amount and calculated remainder amount and percentage based on the net income of incomes and expenses that share the same category. 
 
+## Installation
+To install this project on your computer, follow the instructions below:
+1. Create a directory (folder) where you wish to install the project.
+2. Open your terminal/command prompt and navigate to the selected directory
+3. In this directory, type the following command:
+     ```sh
+     git clone https://github.com/C-CREAD/Task_Manager
+     ```
+4. Navigate to the project folder inside the directory from above:
+     ```sh
+     cd (folder)
+     ```
+5. Run the program using the following command:
+     ```sh
+     python task_manager.py 
+     ```
+
+
 
 ## Use Cases
 
