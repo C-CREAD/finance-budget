@@ -13,7 +13,7 @@ To install this project on your computer, follow the instructions below:
 2. Open your terminal/command prompt and navigate to the selected directory
 3. In this directory, type the following command:
      ```sh
-     git clone https://github.com/C-CREAD/Task_Manager
+     git clone https://github.com/C-CREAD/finance-budget
      ```
 4. Navigate to the project folder inside the directory from above:
      ```sh
@@ -21,7 +21,7 @@ To install this project on your computer, follow the instructions below:
      ```
 5. Run the program using the following command:
      ```sh
-     python task_manager.py 
+     python finance-tracker.py 
      ```
 
 
