@@ -102,14 +102,24 @@ def update_income(income_record):
 
     :return: Render template object
     """
-    if request.method == "POST":
-        income_id = income_record[0]
-        income_name = request.form['name']
-        income_amount = float(request.form['amount'])
-        income_category = request.form['category']
 
-        with sqlite3.connect("data/finance_project.db") as connection:
-            cursor = connection.cursor()
+    # Formatting parameter to get record ID ↙️↙️ (Needs Revision)
+    income_record = income_record.replace("(", "")
+    income_record = income_record.replace(")", "")
+    income_record = income_record.replace("'", "", 4)
+    income_record = income_record.split(",")
+    ID = income_record[0]
+
+    with sqlite3.connect("data/finance_project.db") as connection:
+        cursor = connection.cursor()
+        income_record = cursor.execute(
+            '''SELECT * FROM Incomes WHERE ID = ?''', (ID,)).fetchone()
+
+        if request.method == "POST":
+            income_id = ID
+            income_name = request.form['name']
+            income_amount = float(request.form['amount'])
+            income_category = request.form['category']
 
             cursor.execute('''
                 UPDATE Incomes SET Income = ?, Amount = ?, Category = ? WHERE ID = ?
@@ -124,14 +134,8 @@ def update_income(income_record):
             all_records = cursor.execute('''SELECT * FROM Incomes''').fetchall()
 
             return render_template("incomes.html", incomes=all_records)
-    else:
-        with sqlite3.connect("data/finance_project.db") as connection:
-            cursor = connection.cursor()
-            selected_record = cursor.execute('''SELECT * FROM Incomes WHERE ID = ?''',
-                                             (income_record[0], ))
-
-        return render_template("update income.html", income_record=income_record,
-                               incomes=selected_record)
+        else:
+            return render_template("update income.html", income_record=income_record)
 
 if __name__ == "__main__":
     app.run(debug=True)
