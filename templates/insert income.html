@@ -1,0 +1,22 @@
+{% extends "incomes.html" %}
+{% block content %}
+  <title>Add Income</title>
+
+  <div class="content-section">
+    <form method="POST">
+      <!-- Income Name -->
+      <label>Income Name:</label>
+      <input name="name" placeholder="Enter your income name" required><br/>
+
+      <!-- Income Amount -->
+      <label>Income Amount:</label>
+      <input type="number" min="0" name="amount" placeholder="Enter your income amount" required><br/>
+
+      <!-- Income Category -->
+      <label>Income Category:</label>
+      <input name="category" placeholder="Enter your income category" required><br/>
+
+      <input class="btn btn-primary" type="submit" value="submit"><br/>
+    </form>
+  </div>
+{% endblock %}
