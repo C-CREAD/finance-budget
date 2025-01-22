@@ -1,6 +1,10 @@
 {% extends "incomes.html" %}
 {% block content %}
   <title>Add Income</title>
+  <h1>Add Income</h1>
+  <p>To add a new income record, simply add the requird information in the textboxes below.
+    Click the 'Add' button to confirm adding the record. </p>
+
 
   <div class="content-section">
     <form method="POST">
@@ -16,7 +20,7 @@
       <label>Income Category:</label>
       <input name="category" placeholder="Enter your income category" required><br/>
 
-      <input class="btn btn-primary" type="submit" value="submit"><br/>
+      <input class="btn btn-primary" type="submit" value="Add"><br/>
     </form>
   </div>
 {% endblock %}
