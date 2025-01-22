@@ -61,7 +61,7 @@ def incomes():
         cursor = connection.cursor()
         all_records = cursor.execute('''SELECT * FROM Incomes''').fetchall()
 
-        return render_template('incomes.html', incomes=all_records)
+        return render_template('incomes.html', incomes=all_records, title="Incomes")
 
 
 @app.route('/incomes/add', methods=["GET", "POST"])
