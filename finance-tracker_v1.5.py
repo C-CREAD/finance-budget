@@ -87,9 +87,7 @@ def insert_income():
             # Save changes
             connection.commit()
 
-            all_records = cursor.execute('''SELECT * FROM Incomes''').fetchall()
-
-            return render_template("incomes.html", incomes=all_records)
+            return redirect(url_for("incomes"))
     else:
         return render_template("insert income.html")
 
