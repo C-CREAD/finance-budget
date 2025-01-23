@@ -94,8 +94,8 @@ def insert_income():
         return render_template("insert income.html")
 
 
-@app.route('/income/<income_record>', methods=["GET", "POST"])
-def update_income(income_record):
+@app.route('/income/<int:income_ID>/update', methods=["GET", "POST"])
+def update_income(income_ID):
     """
     This function will render the template to update income records
     from the database.
@@ -103,36 +103,25 @@ def update_income(income_record):
     :return: Render template object
     """
 
-    # Formatting parameter to get record ID ↙️↙️ (Needs Revision)
-    income_record = income_record.replace("(", "")
-    income_record = income_record.replace(")", "")
-    income_record = income_record.replace("'", "", 4)
-    income_record = income_record.split(",")
-    ID = income_record[0]
-
     with sqlite3.connect("data/finance_project.db") as connection:
         cursor = connection.cursor()
         income_record = cursor.execute(
-            '''SELECT * FROM Incomes WHERE ID = ?''', (ID,)).fetchone()
+            '''SELECT * FROM Incomes WHERE ID = ?''', (income_ID,)).fetchone()
 
         if request.method == "POST":
-            income_id = ID
             income_name = request.form['name']
             income_amount = float(request.form['amount'])
             income_category = request.form['category']
 
             cursor.execute('''
                 UPDATE Incomes SET Income = ?, Amount = ?, Category = ? WHERE ID = ?
-            ''', (income_name, income_amount, income_category, income_id, ))
+            ''', (income_name, income_amount, income_category, income_ID, ))
 
             # Save changes
             connection.commit()
 
             # Display message and redirect to Incomes page
             flash("Income record updated successfully!")
-
-            all_records = cursor.execute('''SELECT * FROM Incomes''').fetchall()
-
             return redirect(url_for("incomes"))
         else:
             return render_template("update income.html", income_record=income_record)
