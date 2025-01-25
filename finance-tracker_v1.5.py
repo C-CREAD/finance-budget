@@ -152,6 +152,94 @@ def delete_income(income_ID):
         else:
             return render_template("delete income.html", income_record=income_record)
 
+@app.route('/expenses/add', methods=["GET", "POST"])
+def insert_expense():
+    """
+    This function will render the template to insert expenses
+    into the database.
+
+    :return: Render template object
+    """
+    with sqlite3.connect("data/finance_project.db") as connection:
+        if request.method == "POST":
+            expense_name = request.form['name']
+            expense_amount = float(request.form['amount'])
+            expense_category = request.form['category']
+
+            cursor = connection.cursor()
+            cursor.execute('''
+                INSERT INTO Expenses(Expense, Amount, Category)
+                VALUES(?, ?, ?)
+            ''', (expense_name, expense_amount, expense_category))
+
+            # Save changes
+            connection.commit()
+
+            return redirect(url_for("expenses"))
+        else:
+            return render_template("insert expense.html")
+
+
+@app.route('/expense/<int:expense_ID>/update', methods=["GET", "POST"])
+def update_expense(expense_ID):
+    """
+    This function will render the template to update expense records
+    from the database.
+
+    :return: Render template object
+    """
+
+    with sqlite3.connect("data/finance_project.db") as connection:
+        cursor = connection.cursor()
+        expense_record = cursor.execute(
+            '''SELECT * FROM Expenses WHERE ID = ?''', (expense_ID,)).fetchone()
+
+        if request.method == "POST":
+            expense_name = request.form['name']
+            expense_amount = float(request.form['amount'])
+            expense_category = request.form['category']
+
+            cursor.execute('''
+                UPDATE Expenses SET Expense = ?, Amount = ?, Category = ? WHERE ID = ?
+            ''', (expense_name, expense_amount, expense_category, expense_ID, ))
+
+            # Save changes
+            connection.commit()
+
+            # Display message and redirect to Expense page
+            flash("Expense record updated successfully!")
+            return redirect(url_for("expenses"))
+        else:
+            return render_template("update expense.html", expense_record=expense_record)
+
+
+@app.route('/expense/<int:expense_ID>/delete', methods=["GET", "POST"])
+def delete_expense(expense_ID):
+    """
+    This function will render the template to delete income records
+    from the database.
+
+    :return: Render template object
+    """
+
+    with sqlite3.connect("data/finance_project.db") as connection:
+        cursor = connection.cursor()
+        expense_record = cursor.execute(
+            '''SELECT * FROM Expenses WHERE ID = ?''', (expense_ID,)).fetchone()
+
+        if request.method == "POST":
+            cursor.execute('''
+                DELETE FROM Expenses WHERE ID = ?''', (expense_ID, ))
+
+            # Save changes
+            connection.commit()
+
+            # Display message and redirect to Incomes page
+            flash("Income record deleted successfully!")
+            return redirect(url_for("expenses"))
+        else:
+            return render_template("delete expense.html", expense_record=expense_record)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
