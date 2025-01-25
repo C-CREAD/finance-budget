@@ -1,0 +1,33 @@
+{% extends "budgets.html" %}
+{% block content %}
+  <title>Update Budget</title>
+  <h1>Update Budget</h1>
+
+  <div class="content-section">
+    <p>To update the budget record, simply change the original values in the textbox or leave them if you
+    do not wish to change the values. Click the update button once you are satisfied with the changes. </p>
+
+    <form method="POST">
+      <!-- Budget Name -->
+      <label>Budget Name:</label>
+      <input name="name" placeholder="Enter your budget name" value="{{ budget_record[1] }}" required><br/>
+
+      <!-- Budget Amount -->
+      <label>Budget Amount:</label>
+      <input type="number" min="0" step="0.01" name="amount" placeholder="Enter your budget amount" value="{{ budget_record[2] }}" required><br/>
+
+      <!-- Budget Remainder -->
+      <label>Budget Remainder: {{ budget_record[3] }}</label><br>
+
+      <!-- Budget Percentage -->
+      <label>Budget Percentage: {{ budget_record[4] }}</label><br>
+
+      <!-- Budget Category -->
+      <label>Budget Category:</label>
+      <input name="category" placeholder="Enter your budget category" value="{{ budget_record[5] }}" required><br/>
+
+
+      <input class="btn btn-success" type="submit" value="Update"><br/>
+    </form>
+  </div>
+{% endblock %}

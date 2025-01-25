@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Boostrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<style>
+  table, th, td {
+    border:1px solid black;
+  }
+</style>
+<body>
+  {% if title == "Budgets" %}
+    <title>Budgets</title>
+    <h1>Budgets</h1>
+    <p>Here you can insert and update budgets from the database.
+      You can also view all the budget records from the database.
+      Click on the respective links below to get started.</p>
+
+    <!-- Budget Table -->
+    <h3>Budget Table</h3>
+    <table style="width: 100%">
+      <tr>
+        <th>ID</th>
+        <th>Budget</th>
+        <th>Amount</th>
+        <th>Remainder</th>
+        <th>Remainder Percentage</th>
+        <th>Category</th>
+      </tr>
+
+      <!-- Displaying all budget records -->
+      {% for record in budgets %}
+        <tr>
+          <td> {{ record[0] }}</td>
+          <td> {{ record[1] }}</td>
+          <td> {{ record[2] }}</td>
+          <td> {{ record[3] }}</td>
+          <td> {{ record[4] }}</td>
+          <td> {{ record[5] }}</td>
+          <td><a class="btn btn-success" href="{{ url_for('update_budget',budget_ID=record[0]) }}">Update</a></td>
+
+        </tr>
+      {% endfor %}
+      <a class="btn btn-primary" href="{{ url_for('insert_budget') }}">Add Budget</a>
+    </table><br>
+  {% endif %}
+
+  {% block content %}
+
+  {% endblock %}
+</body>
+</html>
