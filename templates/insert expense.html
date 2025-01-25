@@ -1,0 +1,26 @@
+{% extends "expenses.html" %}
+{% block content %}
+  <title>Add Expense</title>
+  <h1>Add Expense</h1>
+  <p>To add a new expense record, simply add the required information in the textboxes below.
+    Click the 'Add' button to confirm adding the record. </p>
+
+
+  <div class="content-section">
+    <form method="POST">
+      <!-- Expense Name -->
+      <label>Expense Name:</label>
+      <input name="name" placeholder="Enter your expense name" required><br/>
+
+      <!-- Expense Amount -->
+      <label>Expense Amount:</label>
+      <input type="number" min="0" step="0.01" name="amount" placeholder="Enter your expense amount" required><br/>
+
+      <!-- Expense Category -->
+      <label>Expense Category:</label>
+      <input name="category" placeholder="Enter your expense category" required><br/>
+
+      <input class="btn btn-primary" type="submit" value="Add"><br/>
+    </form>
+  </div>
+{% endblock %}

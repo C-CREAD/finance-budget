@@ -1,0 +1,15 @@
+ {% extends "expenses.html" %}
+{% block content %}
+  <title>Delete Expense</title>
+  <h1>Delete Expense</h1>
+
+  <div class="content-section">
+    <p>You are about to delete this expense record. Are you sure you want to continue?
+
+    <form method="POST">
+      <input class="btn btn-danger" type="submit" value="Yes">
+      <a class="btn btn-primary" href="{{ url_for('expenses') }}">No</a>
+    </form>
+
+  </div>
+{% endblock %}

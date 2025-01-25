@@ -1,0 +1,26 @@
+{% extends "expenses.html" %}
+{% block content %}
+  <title>Update Expense</title>
+  <h1>Update Expense</h1>
+
+  <div class="content-section">
+    <p>To update the expense record, simply change the original values in the textbox or leave them if you
+    do not wish to change the values. Click the update button once you are satisfied with the changes. </p>
+
+    <form method="POST">
+      <!-- Expense Name -->
+      <label>Expense Name:</label>
+      <input name="name" placeholder="Enter your expense name" value="{{ expense_record[1] }}" required><br/>
+
+      <!-- Expense Amount -->
+      <label>Expense Amount:</label>
+      <input type="number" min="0" step="0.01"  name="amount" placeholder="Enter your expense amount" value="{{ expense_record[2] }}" required><br/>
+
+      <!-- Expense Category -->
+      <label>Expense Category:</label>
+      <input name="category" placeholder="Enter your expense category" value="{{ expense_record[3] }}" required><br/>
+
+      <input class="btn btn-success" type="submit" value="Update"><br/>
+    </form>
+  </div>
+{% endblock %}
