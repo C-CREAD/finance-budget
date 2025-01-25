@@ -241,5 +241,94 @@ def delete_expense(expense_ID):
             return render_template("delete expense.html", expense_record=expense_record)
 
 
+@app.route('/budgets')
+def budgets():
+    """
+    This function will render the budget page template (i.e. budgets.html)
+    and display all the records from the budget table and the links to
+    insert and update records from the budget table
+
+    :return: Render template object
+    """
+    with sqlite3.connect('data/finance_project.db') as connection:
+        cursor = connection.cursor()
+        all_records = cursor.execute('''SELECT * FROM Budgets''').fetchall()
+
+        return render_template('budgets.html', budgets=all_records, title="Budgets")
+
+
+@app.route('/budgets/add', methods=["GET", "POST"])
+def insert_budget():
+    """
+    This function will render the template to insert budgets
+    into the database.
+
+    :return: Render template object
+    """
+    with sqlite3.connect("data/finance_project.db") as connection:
+        if request.method == "POST":
+            budget_name = request.form['name']
+            budget_amount = float(request.form['amount'])
+            budget_category = request.form['category']
+
+            cursor = connection.cursor()
+            cursor.execute('''
+                INSERT INTO Budgets(Budget, Amount, Category)
+                VALUES(?, ?, ?)
+            ''', (budget_name, budget_amount, budget_category))
+
+            # Save changes
+            connection.commit()
+
+            return redirect(url_for("budgets"))
+        else:
+            return render_template("insert budget.html")
+
+
+@app.route('/budgets/<int:budget_ID>/update', methods=["GET", "POST"])
+def update_budget(budget_ID):
+    """
+    This function will render the template to update budget records
+    from the database.
+
+    :return: Render template object
+    """
+    with sqlite3.connect("data/finance_project.db") as connection:
+        cursor = connection.cursor()
+        budget_record = cursor.execute(
+            '''SELECT * FROM Budgets WHERE ID = ?''', (budget_ID,)).fetchone()
+
+        print(budget_record)
+
+        if request.method == "POST":
+            budget_name = request.form['name']
+            budget_amount = float(request.form['amount'])
+            budget_category = request.form['category']
+
+            cursor.execute('''
+                UPDATE Budgets SET Budget = ?, Amount = ?, Category = ? WHERE ID = ?
+            ''', (budget_name, budget_amount, budget_category, budget_ID,))
+
+            cursor.execute('''
+                UPDATE Budgets SET Remainder = Amount + 
+                    (SELECT SUM(Amount) FROM Incomes WHERE Category = ?) - 
+                    (SELECT SUM(Amount) FROM Expenses WHERE Category = ?)
+                WHERE Category = ?''',
+                           (budget_category, budget_category, budget_category))
+
+            cursor.execute('''
+            UPDATE Budgets SET Remainder_Percentage = 
+                (SELECT ((Remainder / Amount)) FROM Budgets WHERE Category = ?)
+            WHERE Category = ?''', (budget_category, budget_category))
+
+
+            # Save Changes
+            connection.commit()
+
+            return redirect(url_for("budgets"))
+        else:
+            return render_template("update budget.html", budget_record=budget_record)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
