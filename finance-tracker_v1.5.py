@@ -72,12 +72,12 @@ def insert_income():
 
     :return: Render template object
     """
-    if request.method == "POST":
-        income_name = request.form['name']
-        income_amount = float(request.form['amount'])
-        income_category = request.form['category']
+    with sqlite3.connect("data/finance_project.db") as connection:
+        if request.method == "POST":
+            income_name = request.form['name']
+            income_amount = float(request.form['amount'])
+            income_category = request.form['category']
 
-        with sqlite3.connect("data/finance_project.db") as connection:
             cursor = connection.cursor()
             cursor.execute('''
                 INSERT INTO Incomes(Income, Amount, Category)
@@ -88,8 +88,8 @@ def insert_income():
             connection.commit()
 
             return redirect(url_for("incomes"))
-    else:
-        return render_template("insert income.html")
+        else:
+            return render_template("insert income.html")
 
 
 @app.route('/income/<int:income_ID>/update', methods=["GET", "POST"])
@@ -123,6 +123,35 @@ def update_income(income_ID):
             return redirect(url_for("incomes"))
         else:
             return render_template("update income.html", income_record=income_record)
+
+
+@app.route('/income/<int:income_ID>/delete', methods=["GET", "POST"])
+def delete_income(income_ID):
+    """
+    This function will render the template to delete income records
+    from the database.
+
+    :return: Render template object
+    """
+
+    with sqlite3.connect("data/finance_project.db") as connection:
+        cursor = connection.cursor()
+        income_record = cursor.execute(
+            '''SELECT * FROM Incomes WHERE ID = ?''', (income_ID,)).fetchone()
+
+        if request.method == "POST":
+            cursor.execute('''
+                DELETE FROM Incomes WHERE ID = ?''', (income_ID, ))
+
+            # Save changes
+            connection.commit()
+
+            # Display message and redirect to Incomes page
+            flash("Income record deleted successfully!")
+            return redirect(url_for("incomes"))
+        else:
+            return render_template("delete income.html", income_record=income_record)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
