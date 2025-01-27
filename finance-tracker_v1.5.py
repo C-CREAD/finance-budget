@@ -330,5 +330,33 @@ def update_budget(budget_ID):
             return render_template("update budget.html", budget_record=budget_record)
 
 
+@app.route('/budgets/<int:budget_ID>/delete', methods=["GET", "POST"])
+def delete_budget(budget_ID):
+    """
+    This function will render the template to delete budget records
+    from the database.
+
+    :return: Render template object
+    """
+
+    with sqlite3.connect("data/finance_project.db") as connection:
+        cursor = connection.cursor()
+        budget_record = cursor.execute(
+            '''SELECT * FROM Budgets WHERE ID = ?''', (budget_ID,)).fetchone()
+
+        if request.method == "POST":
+            cursor.execute('''
+                DELETE FROM Budgets WHERE ID = ?''', (budget_ID, ))
+
+            # Save changes
+            connection.commit()
+
+            # Display message and redirect to Incomes page
+            flash("Budget record deleted successfully!")
+            return redirect(url_for("budgets"))
+        else:
+            return render_template("delete budget.html", budget_record=budget_record)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
