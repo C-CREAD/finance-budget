@@ -1,11 +1,10 @@
-# Finance Budget Tracker
-This is my Python mini-project that represents a financial budget tracker.
+# Finance Budget Tracker (v1.5 Flask)
+This is my Python mini-project that represents a financial budget tracker using the Flask framework.
 
 
 ## Description
-This mini-project is a terminal program that will let users to create different incomes, expenses, and budgets using Python and SQLite. 
-The user can create, update, and delete incomes and expenses but can only create and update budgets. The user can also view the incomes, expenses, and budgets in a table format for neatness and readability.
-Each income and expense will have its amounts and categories, while the budget will have an initial amount and calculated remainder amount and percentage based on the net income of incomes and expenses that share the same category. 
+This full-stack development mini-project lets users create incomes, expenses, and budgets using Python, Flask, and SQLite. 
+The user can create/update/delete/view incomes, expenses, and budgets.
 
 ## Installation
 To install this project on your computer, follow the instructions below:
@@ -27,82 +26,41 @@ To install this project on your computer, follow the instructions below:
 
 
 ## Use Cases
-
-0. Welcome Menu
-   When running the program, the user will see the following menu options:
-     1. Add a new Income
-     2. Update existing Income
-     3. Delete existing Income
-
-     4. Add a new expense
-     5. Update existing expense
-     6. Delete existing expense
-
-     7. Add a new Budget
-     8. Update existing Budget
-
-     9. View Tables
-
-     0. Exit Application
-
-![image](https://github.com/user-attachments/assets/b2d249dd-d886-4fb5-8b6a-233e31661753)
+In your terminal, click on the following local host link: 
+     ```
+     http://127.0.0.1:5000
+     ```
+     ![image](https://github.com/user-attachments/assets/ea87e40a-8ba9-49d9-956b-2d4a415c8516)
 
 
-2. Creating Incomes and Expenses
-   To add a new income/expense, the user will need to enter the name of the income/expense, the amount of money, and the category of the record.
 
-![image](https://github.com/user-attachments/assets/82d22e72-9f38-4b2c-b68a-c0b6b9924079)
-![image](https://github.com/user-attachments/assets/4aae5dd8-fd40-4b3a-8c4b-6c5077d4883c)
-
-
-4. Updating Incomes and Expenses
-   To update the income/expense, the user must enter the ID number of the record. A table will display all valid records to choose from.
-
-![image](https://github.com/user-attachments/assets/d9015cd1-2f73-412e-84ea-2ac3d926074f)
-![image](https://github.com/user-attachments/assets/4e354fe9-58e6-473f-85f8-3dc92922c5fe)
+0. Home Page
+   The following links will be shown on your browser:
+     - Incomes
+     - Expenses
+     - Budgets
 
 
-6. Deleting Incomes and Expenses
-   To delete the income/expense, the user must enter the ID number of the record. A table will display all valid records to choose from.
+1. Creating Incomes, Expenses, and Budgets
+   To add a new income/expense/budget, you must enter the name of the income/expense/budget, the amount of money, and the category of the record.
 
-![image](https://github.com/user-attachments/assets/31b1bd53-e788-4eba-8455-ca3baa17ff89)
-![image](https://github.com/user-attachments/assets/10efe2ee-103e-4d18-865f-1f4b2e239066)
 
+
+2. Updating Incomes, Expenses, and Budgets
+   To update the income/expense/budget, you must click on the green update button, and then enter the change the existing details in the textboxes. If you wish to not change anything, you can click on the update button without changing the existing details.
    
-8. Creating Budgets
-   To add a new budget, the user will need to enter the budget name, the amount of money, and the category of the record.
-   (NOTE: The Remainder Amounts and Percentages will be calculated once the record is updated)
 
-![image](https://github.com/user-attachments/assets/0330a983-c184-48b3-bb23-e1389088b911)
 
-10. Updating Budgets
-   To update the budget, the user must enter a valid category from the budget table. The remainder amounts and percentages will be calculated based on the net income of the incomes and expenses that share the same category.
-   For example:
-   Income M = 1000   &   Expense M = 850
-   Net Income M = Income M - Expense M = 150
+3. Deleting Incomes, Expenses, and Budgets
+   To delete the income/expense/budget, you must click on the red delete button. A confirmation message will ask if you want to confirm the deletion before proceeding. 
 
-   Therefore, 
-   Budget M Amount - Net Income M = 1500 - 150 = 1350 
 
-![image](https://github.com/user-attachments/assets/3a9ae3f6-2b25-4a0b-85f3-25a809218922)
-    
 
-12. Viewing Incomes, Expenses, and Budgets
-    To view all the incomes, expenses, and budgets, the user must select the options provided to them below.
-
-![image](https://github.com/user-attachments/assets/c8b39f6c-c614-4b03-839d-707ccbcb1976)
-
-Income Table:
-
-![image](https://github.com/user-attachments/assets/a058f742-85b3-489c-b60c-9f75595d9479)
-
-Expense Table:
-
-![image](https://github.com/user-attachments/assets/4b27ff19-800c-4c83-a259-6eac68fa926f)
-
-Budget Table:
-
-![image](https://github.com/user-attachments/assets/0ed0ee51-633c-4552-9018-78bba35759ea)
+## Improvements from the original terminal program:
+- The user can now delete budget records from the database
+- The user can now display advanced statistics of each budget record, such as:
+     1. Percentage Increase/Decrease of the Remainder Amount from the Initial Amount
+     2. Display all incomes and expenses related to the budget by category  
 
     
 Credit: 
