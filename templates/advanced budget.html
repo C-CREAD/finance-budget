@@ -1,0 +1,77 @@
+{% extends "budgets.html" %}
+{% block content %}
+  <title>{{ budget_record[1].capitalize() }}</title>
+  <h1>About Budget</h1>
+
+  <div class="content-section">
+    <p>To update the budget record, simply change the original values in the textbox or leave them if you
+    do not wish to change the values. Click the update button once you are satisfied with the changes. </p>
+
+    <!-- Budget Name -->
+    <label>Budget ID: {{ budget_record[0] }}</label><br>
+
+    <!-- Budget Name -->
+    <label>Budget Name: {{ budget_record[1] }}</label><br>
+
+    <!-- Budget Amount -->
+    <label>Budget Amount: {{ budget_record[2] }}</label><br>
+
+    <!-- Budget Remainder -->
+    <label>Budget Remainder: {{ budget_record[3] }}</label><br>
+
+    <!-- Budget Percentage -->
+    <label>Budget Percentage: {{ budget_record[4] * 100 }}%</label><br>
+
+    {% if (budget_record[3] - budget_record[2]) > 0 %}
+      <label style="color:#3ee400;">Percentage Increase: +{{ (budget_record[3] - budget_record[2]) }}%</label><br>
+    {% else %}
+      <label style="color:#e40000;">Percentage Decrease: {{ (budget_record[3] - budget_record[2]) }}%</label><br>
+    {% endif %}
+    <!-- Budget Category -->
+    <label>Budget Category: {{ budget_record[5] }}</label><br>
+
+    <!-- Incomes by Category Table -->
+    <h3>All Income Category '{{ budget_record[5].capitalize() }}' Records</h3>
+    <table style="width: 100%">
+      <tr>
+        <th>ID</th>
+        <th>Income</th>
+        <th>Amount</th>
+        <th>Category</th>
+      </tr>
+
+      <!-- Displaying all income records -->
+      {% for record in incomes %}
+        <tr>
+          <td> {{ record[0] }}</td>
+          <td> {{ record[1] }}</td>
+          <td> {{ record[2] }}</td>
+          <td> {{ record[3] }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+
+    <!-- Expenses by Category Table -->
+    <h3>All Expense Category '{{ budget_record[5].capitalize() }}' Records</h3>
+    <table style="width: 100%">
+      <tr>
+        <th>ID</th>
+        <th>Income</th>
+        <th>Amount</th>
+        <th>Category</th>
+      </tr>
+
+      <!-- Displaying all income records -->
+      {% for record in expenses %}
+        <tr>
+          <td> {{ record[0] }}</td>
+          <td> {{ record[1] }}</td>
+          <td> {{ record[2] }}</td>
+          <td> {{ record[3] }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+
+    <a class="btn btn-primary" href="{{ url_for('budgets') }}">Back to Budgets</a>
+  </div>
+{% endblock %}
