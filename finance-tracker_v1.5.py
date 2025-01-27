@@ -358,5 +358,32 @@ def delete_budget(budget_ID):
             return render_template("delete budget.html", budget_record=budget_record)
 
 
+@app.route('/budgets/<int:budget_ID>')
+def selected_budget(budget_ID):
+    """
+    This function will render all the information related to the selected
+    budget record, such as:
+    - incomes and expenses related by category
+    - percentage increases/decreases of the remainder values from the initial budget
+
+    :param budget_ID: Budget ID
+    :return: Render template object
+    """
+    with sqlite3.connect("data/finance_project.db") as connection:
+        cursor = connection.cursor()
+        budget_record = cursor.execute('''SELECT * FROM Budgets WHERE ID = ?''',
+                                       (budget_ID,)).fetchone()
+        budget_category = budget_record[5]
+
+        related_incomes = cursor.execute('''SELECT * FROM Incomes WHERE Category = ?''',
+                                        (budget_category,)).fetchall()
+
+        related_expenses = cursor.execute('''SELECT * FROM Expenses WHERE Category = ?''',
+                                         (budget_category,)).fetchall()
+
+        return render_template("advanced budget.html", budget_record=budget_record,
+                               incomes=related_incomes, expenses=related_expenses)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
