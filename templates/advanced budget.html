@@ -24,9 +24,9 @@
 
     <!-- Percentage Increase/Decrease -->
     {% if budget_record[3].__class__ == float_type and (budget_record[3] - budget_record[2]) > 0 %}
-      <label style="color:#3ee400;">Percentage Increase: +{{ (budget_record[3] - budget_record[2]) }}%</label><br>
+      <label style="color:#3ee400;">Percentage Increase: +{{ ((budget_record[3] - budget_record[2]) / budget_record[2]) * 100 }}%</label><br>
     {% elif budget_record[3].__class__ == float_type and (budget_record[3] - budget_record[2]) < 0 %}
-      <label style="color:#e40000;">Percentage Decrease: {{ (budget_record[3] - budget_record[2]) }}%</label><br>
+      <label style="color:#e40000;">Percentage Decrease: {{ ((budget_record[3] - budget_record[2]) / budget_record[2]) * 100 }}%</label><br>
     {% endif %}
     
     <!-- Budget Category -->
