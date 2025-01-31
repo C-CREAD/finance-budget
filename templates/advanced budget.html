@@ -20,13 +20,15 @@
     <label>Budget Remainder: {{ budget_record[3] }}</label><br>
 
     <!-- Budget Percentage -->
-    <label>Budget Percentage: {{ budget_record[4] * 100 }}%</label><br>
+    <label>Budget Percentage: {% if budget_record[4].__class__ == float_type %} {{ budget_record[4] * 100 }}% {% else %} {{ budget_record[4] }} {% endif %} </label><br>
 
-    {% if budget_record[3].__class__ == "float" and (budget_record[3] - budget_record[2]) > 0 %}
+    <!-- Percentage Increase/Decrease -->
+    {% if budget_record[3].__class__ == float_type and (budget_record[3] - budget_record[2]) > 0 %}
       <label style="color:#3ee400;">Percentage Increase: +{{ (budget_record[3] - budget_record[2]) }}%</label><br>
-    {% elif budget_record[3].__class__ == "float" and (budget_record[3] - budget_record[2]) < 0 %}
+    {% elif budget_record[3].__class__ == float_type and (budget_record[3] - budget_record[2]) < 0 %}
       <label style="color:#e40000;">Percentage Decrease: {{ (budget_record[3] - budget_record[2]) }}%</label><br>
     {% endif %}
+    
     <!-- Budget Category -->
     <label>Budget Category: {{ budget_record[5] }}</label><br>
 
