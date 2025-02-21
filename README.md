@@ -1,11 +1,13 @@
-# Finance Budget Tracker
+# Finance Budget Tracker (Terminal Version)
 This is my Python mini-project that represents a financial budget tracker.
 
 
 ## Description
-This mini-project is a terminal program that will let users to create different incomes, expenses, and budgets using Python and SQLite. 
+This terminal mini-project lets users create different incomes, expenses, and budgets using Python and SQLite. 
 The user can create, update, and delete incomes and expenses but can only create and update budgets. The user can also view the incomes, expenses, and budgets in a table format for neatness and readability.
 Each income and expense will have its amounts and categories, while the budget will have an initial amount and calculated remainder amount and percentage based on the net income of incomes and expenses that share the same category. 
+
+To visit the Flask variation of this project, go to the v1.5 branch or click [here](https://github.com/C-CREAD/finance-budget/tree/v1.5).
 
 ## Installation
 To install this project on your computer, follow the instructions below:
@@ -103,7 +105,6 @@ Expense Table:
 Budget Table:
 
 ![image](https://github.com/user-attachments/assets/0ed0ee51-633c-4552-9018-78bba35759ea)
-
     
 Credit: 
 Shingai Dzinotyiweyi
