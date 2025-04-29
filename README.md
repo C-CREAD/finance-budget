@@ -107,15 +107,17 @@ Once Docker Desktop is installed, follow the instructions below:
      ![image](https://github.com/user-attachments/assets/655748f3-c0b5-43da-b565-214583582d27)
 
    You should be redirected to a new tab with the image running the project.
-     ![image](https://github.com/user-attachments/assets/4457d7d7-e004-40d7-b604-90d127fd1738)
+     ![image](https://github.com/user-attachments/assets/ee0d928b-1aef-4902-a91b-53bc5b4a481e)
+
 
 
 ## Improvements from the original terminal program:
 - The user can now delete budget records from the database
 - The user can now display advanced statistics of each budget record, such as:
      1. Percentage Increase/Decrease of the Remainder Amount from the Initial Amount
-     2. Display all incomes and expenses related to the budget by category  
-
+     2. Display all incomes and expenses related to the budget by category
+- Improved initial Bootstrap CSS to make the project look aesthetically pleasing
+- Fixed bugs which caught unsupported types (float and None), and caught ZeroDivisionErrors when displaying the progress bar.
     
 Credit: 
 Shingai Dzinotyiweyi
