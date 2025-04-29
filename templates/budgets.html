@@ -1,59 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Budgets - Finance Tracker</title>
 
-  <!-- Boostrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 2rem;
+        }
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .page-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+        .table th {
+            background-color: #28a745; /* Green header to match success theme */
+            color: white;
+            border-top: none;
+        }
+        .table td, .table th {
+            padding: 12px 15px;
+            vertical-align: middle;
+            border: 1px solid #dee2e6;
+        }
+        .table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .table tr:hover {
+            background-color: #d4edda; /* Light green hover to match theme */
+        }
+        .btn-action {
+            min-width: 80px;
+            margin: 2px;
+        }
+        .btn-add {
+            margin-bottom: 1.5rem;
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .btn-add:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        .progress {
+            height: 20px;
+            margin-bottom: 0;
+        }
+        .budget-link {
+            color: #28a745;
+            font-weight: 500;
+        }
+        .budget-link:hover {
+            color: #1e7e34;
+            text-decoration: none;
+        }
+    </style>
 </head>
-<style>
-  table, th, td {
-    border:1px solid black;
-  }
-</style>
 <body>
-  {% if title == "Budgets" %}
-    <title>Budgets</title>
-    <h1>Budgets</h1>
-    <p>Here you can insert and update budgets from the database.
-      You can also view all the budget records from the database.
-      Click on the respective links below to get started.</p>
+    <div class="main-container">
+        {% if title == "Budgets" %}
+        <div class="page-header">
+            <h1 class="display-4 text-success">
+                <i class="fas fa-chart-pie mr-2"></i>Budgets
+            </h1>
+            <p class="lead">Manage your financial goals. Set budgets, track spending, and monitor your progress.</p>
+            <a class="btn btn-success btn-lg btn-add" href="{{ url_for('insert_budget') }}">
+                <i class="fas fa-plus-circle mr-2"></i>Add New Budget
+            </a>
+        </div>
 
-    <!-- Budget Table -->
-    <h3>Budget Table</h3>
-    <table style="width: 100%">
-      <tr>
-        <th>ID</th>
-        <th>Budget</th>
-        <th>Amount</th>
-        <th>Remainder</th>
-        <th>Remainder Percentage</th>
-        <th>Category</th>
-      </tr>
+        <!-- Budget Table -->
+        <div class="table-container">
+            <h3 class="mb-3"><i class="fas fa-table mr-2"></i>Budget Records</h3>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Budget</th>
+                        <th data-toggle="popover" title="Budget Amount"
+                            data-content="The total initial amount assigned for this budget category. This is your spending limit.">
+                          Amount
+                        </th>
+                        <th data-toggle="popover" title="Budget Remainder"
+                            data-content="The total calculated amount remaining for this budget category. This is your remaining limit.">
+                          Remaining
+                        </th>
+                        <th data-toggle="popover" title="Budget Progress"
+                            data-content="The percentage of the remaining calculated amount for this budget. The higher the percentage, the more funds available.">
+                          Progress
+                        </th>
+                        <th>Category</th>
+                        <th data-toggle="popover" title="Update or Delete"
+                            data-content="Choose to update or delete a budget record. (NOTE: All deletions are permanent)">
+                          Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in budgets %}
+                    <tr>
+                        <td>{{ record[0] }}</td>
+                        <td>
+                            <a class="budget-link" href="{{ url_for('selected_budget', budget_ID=record[0]) }}">
+                                {{ record[1] }}
+                            </a>
+                        </td>
+                        <td>${{ record[2] }}</td>
+                        {% if record[3].__class__ != float_type %}
+                          <td><span class="text-muted" data-toggle="popover" title="NOTE: MISSING NET INCOME!"
+                            data-content="This record may not have any incomes and/or expenses associated by the same category. Make sure to create an income and expense record with the same category as this budget record to resolve this issue.">
+                              Unknown</span> <i class="fas fa-exclamation-triangle text-warning mr-1"></i></td>
+                        {% else %}
+                          <td>${{ record[3] }}</td>
+                        {% endif %}
 
-      <!-- Displaying all budget records -->
-      {% for record in budgets %}
+                        <td class="text-center">
+                            {% if record[4].__class__ == float_type %}
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar"
+                                     style="width: {{ record[4] * 100 }}%"
+                                     aria-valuenow="{{ record[4] * 100 }}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                    {{ (record[4] * 100)|round(1) }}%
+                                </div>
+                            </div>
+                            {% else %}
+                            <span class="text-muted" data-toggle="popover" title="NOTE!"
+                            data-content="Budget amount needs attention. Please update the initial budget amount.">
+                              Undefined</span> <i class="fas fa-exclamation-triangle text-warning mr-1"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ record[5] }}</td>
+                        <td class="text-nowrap">
+                            <a class="btn btn-sm btn-primary btn-action"
+                               href="{{ url_for('update_budget',budget_ID=record[0]) }}">
+                                <i class="fas fa-edit mr-1"></i>Update
+                            </a>
+                            <a class="btn btn-sm btn-danger btn-action"
+                               href="{{ url_for('delete_budget',budget_ID=record[0]) }}">
+                                <i class="fas fa-trash-alt mr-1"></i>Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
 
-        <tr>
-          <td> {{ record[0] }}</td>
-          <td> <a href="{{ url_for('selected_budget', budget_ID=record[0]) }}">{{ record[1] }}</a></td>
-          <td> {{ record[2] }}</td>
-          <td> {{ record[3] }}</td>
-          <td> {% if record[4].__class__ == float_type %} {{ record[4] * 100 }}% {% else %} {{ record[4] }} {% endif %} </td>
-          <td> {{ record[5] }}</td>
-          <td><a class="btn btn-success" href="{{ url_for('update_budget',budget_ID=record[0]) }}">Update</a></td>
-          <td><a class="btn btn-danger" href="{{ url_for('delete_budget',budget_ID=record[0]) }}">Delete</a> </td>
+        {% block content %}{% endblock %}
+    </div>
 
-        </tr>
-      {% endfor %}
-      <a class="btn btn-primary" href="{{ url_for('insert_budget') }}">Add Budget</a>
-    </table><br>
-  {% endif %}
-
-  {% block content %}
-
-  {% endblock %}
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function(){
+          // Initialize all popovers
+          $('[data-toggle="popover"]').popover({
+              trigger: 'hover',
+              placement: 'top',
+              html: true,
+              container: 'body'
+          });
+      });
+    </script>
 </body>
 </html>

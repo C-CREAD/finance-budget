@@ -1,26 +1,60 @@
 {% extends "incomes.html" %}
 {% block content %}
-  <title>Add Income</title>
-  <h1>Add Income</h1>
-  <p>To add a new income record, simply add the requird information in the textboxes below.
-    Click the 'Add' button to confirm adding the record. </p>
 
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    .form-header {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+</style>
+<div class="form-container">
+    <div class="form-header">
+        <h1 class="display-4 text-primary">
+            <i class="fas fa-plus-circle mr-2"></i>New Income
+        </h1>
+        <p class="lead">Record a new income source to track your earnings</p>
+    </div>
 
-  <div class="content-section">
-    <form method="POST">
-      <!-- Income Name -->
-      <label>Income Name:</label>
-      <input name="name" placeholder="Enter your income name" required><br/>
+    <div class="card border-primary">
+        <div class="card-header bg-primary text-white">
+            <h4><i class="fas fa-money-bill-wave mr-2"></i>Income Details</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="name">Income Source</label>
+                    <input type="text" class="form-control" id="name" name="name"
+                           placeholder="e.g. Salary, Freelance Work" required>
+                    <small class="form-text text-muted">Describe where the income came from</small>
+                </div>
 
-      <!-- Income Amount -->
-      <label>Income Amount:</label>
-      <input type="number" min="0" name="amount" placeholder="Enter your income amount" required><br/>
+                <div class="form-group">
+                    <label for="amount">Amount ($)</label>
+                    <input type="number" class="form-control" id="amount" name="amount"
+                           min="0" step="0.01" placeholder="0.00" required>
+                    <small class="form-text text-muted">Enter the amount earned</small>
+                </div>
 
-      <!-- Income Category -->
-      <label>Income Category:</label>
-      <input name="category" placeholder="Enter your income category" required><br/>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" class="form-control" id="category" name="category"
+                           placeholder="e.g. Salary, Investments" required>
+                    <small class="form-text text-muted">Categorize your income</small>
+                </div>
 
-      <input class="btn btn-primary" type="submit" value="Add"><br/>
-    </form>
-  </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-save mr-2"></i>Add Income
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

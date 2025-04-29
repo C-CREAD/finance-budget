@@ -1,33 +1,81 @@
 {% extends "budgets.html" %}
 {% block content %}
-  <title>Update Budget</title>
-  <h1>Update Budget</h1>
 
-  <div class="content-section">
-    <p>To update the budget record, simply change the original values in the textbox or leave them if you
-    do not wish to change the values. Click the update button once you are satisfied with the changes. </p>
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    .form-header {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+    .form-control-plaintext {
+        padding: 0.5rem 0;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+</style>
+<div class="form-container">
+    <div class="form-header">
+        <h1 class="display-4 text-success">
+            <i class="fas fa-edit mr-2"></i>Update Budget
+        </h1>
+        <p class="lead">Modify your budget details below</p>
+    </div>
 
-    <form method="POST">
-      <!-- Budget Name -->
-      <label>Budget Name:</label>
-      <input name="name" placeholder="Enter your budget name" value="{{ budget_record[1] }}" required><br/>
+    <div class="card border-success">
+        <div class="card-header bg-success text-white">
+            <h4><i class="fas fa-chart-pie mr-2"></i>Budget Details</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="name">Budget Name</label>
+                    <input type="text" class="form-control" id="name" name="name"
+                           value="{{ budget_record[1] }}" required>
+                </div>
 
-      <!-- Budget Amount -->
-      <label>Budget Amount:</label>
-      <input type="number" min="0" step="0.01" name="amount" placeholder="Enter your budget amount" value="{{ budget_record[2] }}" required><br/>
+                <div class="form-group">
+                    <label for="amount">Budget Amount ($)</label>
+                    <input type="number" class="form-control" id="amount" name="amount"
+                           min="0" step="0.01" value="{{ budget_record[2] }}" required>
+                </div>
 
-      <!-- Budget Remainder -->
-      <label>Budget Remainder: {{ budget_record[3] }}</label><br>
+                <div class="form-group">
+                    <label>Budget Remainder</label>
+                    <div class="form-control-plaintext">${{ budget_record[3] }}</div>
+                </div>
 
-      <!-- Budget Percentage -->
-      <label>Budget Percentage: {{ budget_record[4] }}</label><br>
+                <div class="form-group">
+                    <label>Budget Percentage</label>
+                    <div class="form-control-plaintext">
+                        {% if budget_record[4].__class__ == float_type %}
+                            {{ (budget_record[4] * 100)|round(1) }}%
+                        {% else %}
+                            Undefined
+                        {% endif %}
+                    </div>
+                </div>
 
-      <!-- Budget Category -->
-      <label>Budget Category:</label>
-      <input name="category" placeholder="Enter your budget category" value="{{ budget_record[5] }}" required><br/>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" class="form-control" id="category" name="category"
+                           value="{{ budget_record[5] }}" required>
+                </div>
 
-
-      <input class="btn btn-success" type="submit" value="Update"><br/>
-    </form>
-  </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-save mr-2"></i>Update
+                    </button>
+                    <a href="{{ url_for('budgets') }}" class="btn btn-outline-secondary btn-lg ml-2">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,79 +1,211 @@
 {% extends "budgets.html" %}
 {% block content %}
-  <title>{{ budget_record[1].capitalize() }}</title>
-  <h1>About Budget</h1>
+<div class="budget-detail-container">
+    <div class="budget-header">
+        <h1 class="display-4 text-success">
+            <i class="fas fa-chart-line mr-2"></i>{{ budget_record[1].capitalize() }} Budget
+        </h1>
+        <p class="lead">Detailed view of your budget and related transactions</p>
+    </div>
 
-  <div class="content-section">
-    <p>To update the budget record, simply change the original values in the textbox or leave them if you
-    do not wish to change the values. Click the update button once you are satisfied with the changes. </p>
+    <div class="budget-summary card mb-4">
+        <div class="card-header bg-success text-white">
+            <h4><i class="fas fa-info-circle mr-2"></i>Budget Summary</h4>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">To update the budget record, simply change the original values in the textbox or leave them if you do not wish to change the values.</p>
 
-    <!-- Budget Name -->
-    <label>Budget ID: {{ budget_record[0] }}</label><br>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Budget ID:</strong> {{ budget_record[0] }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Budget Name:</strong> {{ budget_record[1] }}
+                        </li>
+                        <li class="list-group-item">
+                          {% if budget_record[2] <= 0 %}
+                            <strong>Budget Amount:</strong> ${{ budget_record[2] }}  <i class="fas fa-exclamation-triangle text-warning mr-1"></i>
+                          {% else %}
+                            <strong>Budget Amount:</strong> ${{ budget_record[2] }}
+                          {% endif %}
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Budget Remainder:</strong> ${{ budget_record[3] }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Budget Percentage:</strong>
+                            {% if budget_record[4].__class__ == float_type %}
+                            <span class="badge badge-pill badge-{% if budget_record[4] >= 0.5 %}success{% elif budget_record[4] >= 0.25 %}warning{% else %}danger{% endif %}">
+                                {{ (budget_record[4] * 100)|round(1) }}%
+                            </span>
+                            {% else %}
+                            <span class="badge badge-pill badge-secondary">Undefined</span> <i class="fas fa-exclamation-triangle text-warning mr-1"></i>
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Status:</strong>
 
-    <!-- Budget Name -->
-    <label>Budget Name: {{ budget_record[1] }}</label><br>
+                            <!-- Positive Progress (Green) -->
+                            {% if budget_record[3].__class__ == float_type and(budget_record[3] - budget_record[2]) > 0 and budget_record[2] > 0 %}
+                                <span class="text-success">
+                                    <i class="fas fa-arrow-up mr-1"></i>+{{ ((budget_record[3] - budget_record[2]) / budget_record[2]) * 100 }}%
+                                </span>
 
-    <!-- Budget Amount -->
-    <label>Budget Amount: {{ budget_record[2] }}</label><br>
+                            <!-- Incomplete Progress (Yellow) -->
+                            {% elif budget_record[3].__class__ == float_type and (budget_record[3] - budget_record[2]) > 0 and budget_record[2] <= 0 %}
+                                <span class="text-danger">
+                                    Incomplete (Budget Amount Required) <i class="fas fa-exclamation-triangle text-warning mr-1"></i>
+                                </span>
 
-    <!-- Budget Remainder -->
-    <label>Budget Remainder: {{ budget_record[3] }}</label><br>
+                            <!-- Negative Progress (Red) -->
+                            {% elif budget_record[3].__class__ == float_type and (budget_record[3] - budget_record[2]) < 0 %}
+                                <span class="text-danger">
+                                    <i class="fas fa-arrow-down mr-1"></i>{{ ((budget_record[3] - budget_record[2]) / budget_record[2]) * 100 }}%
+                                </span>
 
-    <!-- Budget Percentage -->
-    <label>Budget Percentage: {% if budget_record[4].__class__ == float_type %} {{ budget_record[4] * 100 }}% {% else %} {{ budget_record[4] }} {% endif %} </label><br>
+                            <!-- No Progress Found -->
+                            {% elif budget_record[3].__class__ != float_type %}
+                                {% if not incomes %}
+                                    <span class="text-danger">
+                                        No Income Records Found for {{ budget_record[1].capitalize() }} Budget (Income Amount Required) <i class="fas fa-exclamation-triangle text-warning mr-1"></i>
+                                    </span>
+                                {% elif not expenses %}
+                                    <span class="text-danger">
+                                        No Expense Records Found for {{ budget_record[1].capitalize() }} Budget (Expense Amount Required) <i class="fas fa-exclamation-triangle text-warning mr-1"></i>
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Category:</strong>
+                            <span class="badge badge-primary">{{ budget_record[5] }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
-    <!-- Percentage Increase/Decrease -->
-    {% if budget_record[3].__class__ == float_type and (budget_record[3] - budget_record[2]) > 0 %}
-      <label style="color:#3ee400;">Percentage Increase: +{{ ((budget_record[3] - budget_record[2]) / budget_record[2]) * 100 }}%</label><br>
-    {% elif budget_record[3].__class__ == float_type and (budget_record[3] - budget_record[2]) < 0 %}
-      <label style="color:#e40000;">Percentage Decrease: {{ ((budget_record[3] - budget_record[2]) / budget_record[2]) * 100 }}%</label><br>
-    {% endif %}
-    
-    <!-- Budget Category -->
-    <label>Budget Category: {{ budget_record[5] }}</label><br>
+            <div class="progress mt-3" style="height: 25px;">
+                {% if budget_record[4].__class__ == float_type %}
+                <div class="progress-bar progress-bar-striped
+                    {% if budget_record[4] >= 0.75 %}bg-success
+                    {% elif budget_record[4] >= 0.5 %}bg-info
+                    {% elif budget_record[4] >= 0.25 %}bg-warning
+                    {% else %}bg-danger{% endif %}"
+                    role="progressbar"
+                    style="width: {{ budget_record[4] * 100 }}%"
+                    aria-valuenow="{{ budget_record[4] * 100 }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100">
+                    {{ (budget_record[4] * 100)|round(1) }}% of budget remaining
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 
     <!-- Incomes by Category Table -->
-    <h3>All Income Category '{{ budget_record[5].capitalize() }}' Records</h3>
-    <table style="width: 100%">
-      <tr>
-        <th>ID</th>
-        <th>Income</th>
-        <th>Amount</th>
-        <th>Category</th>
-      </tr>
-
-      <!-- Displaying all income records -->
-      {% for record in incomes %}
-        <tr>
-          <td> {{ record[0] }}</td>
-          <td> {{ record[1] }}</td>
-          <td> {{ record[2] }}</td>
-          <td> {{ record[3] }}</td>
-        </tr>
-      {% endfor %}
-    </table>
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h4><i class="fas fa-money-bill-wave mr-2"></i>Income Records for '{{ budget_record[5].capitalize() }}'</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Income</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in incomes %}
+                        <tr>
+                            <td>{{ record[0] }}</td>
+                            <td>{{ record[1] }}</td>
+                            <td>${{ record[2] }}</td>
+                            <td><span class="badge badge-info">{{ record[3] }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <!-- Expenses by Category Table -->
-    <h3>All Expense Category '{{ budget_record[5].capitalize() }}' Records</h3>
-    <table style="width: 100%">
-      <tr>
-        <th>ID</th>
-        <th>Income</th>
-        <th>Amount</th>
-        <th>Category</th>
-      </tr>
+    <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+            <h4><i class="fas fa-receipt mr-2"></i>Expense Records for '{{ budget_record[5].capitalize() }}'</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Expense</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in expenses %}
+                        <tr>
+                            <td>{{ record[0] }}</td>
+                            <td>{{ record[1] }}</td>
+                            <td>${{ record[2] }}</td>
+                            <td><span class="badge badge-danger">{{ record[3] }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-      <!-- Displaying all income records -->
-      {% for record in expenses %}
-        <tr>
-          <td> {{ record[0] }}</td>
-          <td> {{ record[1] }}</td>
-          <td> {{ record[2] }}</td>
-          <td> {{ record[3] }}</td>
-        </tr>
-      {% endfor %}
-    </table>
+    <div class="text-center mb-4">
+        <a class="btn btn-success mr-2" href="{{ url_for('update_budget', budget_ID=budget_record[0]) }}">
+            <i class="fas fa-edit mr-1"></i>Update Budget
+        </a>
+        <a class="btn btn-primary" href="{{ url_for('budgets') }}">
+            <i class="fas fa-arrow-left mr-1"></i>Back to Budgets
+        </a>
+    </div>
+</div>
 
-    <a class="btn btn-primary" href="{{ url_for('budgets') }}">Back to Budgets</a>
-  </div>
+<style>
+    .budget-detail-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    .budget-header {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+    .progress-bar-striped {
+        background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+        background-size: 1rem 1rem;
+    }
+    .table th {
+        background-color: #f8f9fa;
+        color: #495057;
+    }
+    .badge {
+        font-size: 90%;
+        padding: 0.4em 0.6em;
+    }
+</style>
 {% endblock %}

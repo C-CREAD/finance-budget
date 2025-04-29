@@ -1,15 +1,41 @@
- {% extends "expenses.html" %}
+{% extends "expenses.html" %}
 {% block content %}
-  <title>Delete Expense</title>
-  <h1>Delete Expense</h1>
 
-  <div class="content-section">
-    <p>You are about to delete this expense record. Are you sure you want to continue?
+<style>
+    .delete-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    .delete-header {
+        margin-bottom: 2rem;
+    }
+</style>
+<div class="delete-container">
+    <div class="delete-header text-center">
+        <h1 class="display-4 text-danger">
+            <i class="fas fa-exclamation-triangle mr-2"></i>Delete Expense
+        </h1>
+        <hr class="my-4">
+    </div>
 
-    <form method="POST">
-      <input class="btn btn-danger" type="submit" value="Yes">
-      <a class="btn btn-primary" href="{{ url_for('expenses') }}">No</a>
-    </form>
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h4><i class="fas fa-trash-alt mr-2"></i>Confirm Deletion</h4>
+        </div>
+        <div class="card-body text-center">
+            <p class="lead">You are about to permanently delete this expense record.</p>
+            <p class="text-muted mb-4">This action cannot be undone. Are you sure you want to continue?</p>
 
-  </div>
+            <form method="POST" class="d-inline">
+                <button type="submit" class="btn btn-danger btn-lg">
+                    <i class="fas fa-check mr-2"></i>Yes, Delete
+                </button>
+            </form>
+            <a href="{{ url_for('expenses') }}" class="btn btn-outline-secondary btn-lg ml-2">
+                <i class="fas fa-times mr-2"></i>Cancel
+            </a>
+        </div>
+    </div>
+</div>
 {% endblock %}

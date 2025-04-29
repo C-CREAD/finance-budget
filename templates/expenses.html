@@ -1,54 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Expenses - Finance Tracker</title>
 
-  <!-- Boostrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 2rem;
+        }
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .page-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+        .table th {
+            background-color: #dc3545; /* Red header to match danger theme */
+            color: white;
+            border-top: none;
+        }
+        .table td, .table th {
+            padding: 12px 15px;
+            vertical-align: middle;
+            border: 1px solid #dee2e6;
+        }
+        .table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .table tr:hover {
+            background-color: #f5d5d8; /* Light red hover to match theme */
+        }
+        .btn-action {
+            min-width: 80px;
+            margin: 2px;
+        }
+        .btn-add {
+            margin-bottom: 1.5rem;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-add:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+    </style>
 </head>
-<style>
-  table, th, td {
-    border:1px solid black;
-  }
-</style>
 <body>
-  {% if title == "Expenses" %}
-    <title>Expenses</title>
-    <h1>Expenses</h1>
-    <p>Here you can insert, update, and delete expenses from the database.
-      You can also view all the expense records from the database.
-      Click on the respective links below to get started.</p>
+    <div class="main-container">
+        {% if title == "Expenses" %}
+        <div class="page-header">
+            <h1 class="display-4 text-danger">
+                <i class="fas fa-receipt mr-2"></i>Expenses
+            </h1>
+            <p class="lead">Track and manage all your expenses. You can insert, update, and delete expense records below.</p>
+            <a class="btn btn-danger btn-lg btn-add" href="{{ url_for('insert_expense') }}">
+                <i class="fas fa-plus-circle mr-2"></i>Add New Expense
+            </a>
+        </div>
 
-    <!-- Expense Table -->
-    <h3>Expense Table</h3>
-    <table style="width: 100%">
-      <tr>
-        <th>ID</th>
-        <th>Expense</th>
-        <th>Amount</th>
-        <th>Category</th>
-      </tr>
+        <!-- Expense Table -->
+        <div class="table-container">
+            <h3 class="mb-3"><i class="fas fa-table mr-2"></i>Expense Records</h3>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Expense</th>
+                        <th data-toggle="popover" title="Expense Amount"
+                            data-content="The expense amount assigned to a specific category. This amount will be used to calculate your Net Income.">
+                            Amount
+                        </th>
+                        <th>Category</th>
+                        <th data-toggle="popover" title="Update or Delete"
+                            data-content="Choose to update or delete an expense record. (NOTE: All deletions are permanent)">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in expenses %}
+                    <tr>
+                        <td>{{ record[0] }}</td>
+                        <td>{{ record[1] }}</td>
+                        <td>${{ record[2] }}</td>
+                        <td>{{ record[3] }}</td>
+                        <td class="text-nowrap">
+                            <a class="btn btn-sm btn-success btn-action"
+                               href="{{ url_for('update_expense',expense_ID=record[0]) }}">
+                                <i class="fas fa-edit mr-1"></i>Update
+                            </a>
+                            <a class="btn btn-sm btn-danger btn-action"
+                               href="{{ url_for('delete_expense',expense_ID=record[0]) }}">
+                                <i class="fas fa-trash-alt mr-1"></i>Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
 
-      <!-- Displaying all expense records -->
-      {% for record in expenses %}
-        <tr>
-          <td> {{ record[0] }}</td>
-          <td> {{ record[1] }}</td>
-          <td> {{ record[2] }}</td>
-          <td> {{ record[3] }}</td>
-          <td><a class="btn btn-success" href="{{ url_for('update_expense',expense_ID=record[0]) }}">Update</a></td>
-          <td><a class="btn btn-danger" href="{{ url_for('delete_expense',expense_ID=record[0]) }}">Delete</a> </td>
+        {% block content %}{% endblock %}
+    </div>
 
-        </tr>
-      {% endfor %}
-      <a class="btn btn-primary" href="{{ url_for('insert_expense') }}">Add Expense</a>
-    </table><br>
-  {% endif %}
-
-  {% block content %}
-
-  {% endblock %}
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function(){
+          // Initialize all popovers
+          $('[data-toggle="popover"]').popover({
+              trigger: 'hover',
+              placement: 'top',
+              html: true,
+              container: 'body'
+          });
+      });
+    </script>
 </body>
 </html>

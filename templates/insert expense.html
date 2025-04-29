@@ -1,26 +1,60 @@
 {% extends "expenses.html" %}
 {% block content %}
-  <title>Add Expense</title>
-  <h1>Add Expense</h1>
-  <p>To add a new expense record, simply add the required information in the textboxes below.
-    Click the 'Add' button to confirm adding the record. </p>
 
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    .form-header {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+</style>
+<div class="form-container">
+    <div class="form-header">
+        <h1 class="display-4 text-danger">
+            <i class="fas fa-plus-circle mr-2"></i>New Expense
+        </h1>
+        <p class="lead">Record a new expense to track your spending</p>
+    </div>
 
-  <div class="content-section">
-    <form method="POST">
-      <!-- Expense Name -->
-      <label>Expense Name:</label>
-      <input name="name" placeholder="Enter your expense name" required><br/>
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h4><i class="fas fa-receipt mr-2"></i>Expense Details</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="name">Expense Name</label>
+                    <input type="text" class="form-control" id="name" name="name"
+                           placeholder="e.g. Grocery Shopping" required>
+                    <small class="form-text text-muted">Describe what you spent money on</small>
+                </div>
 
-      <!-- Expense Amount -->
-      <label>Expense Amount:</label>
-      <input type="number" min="0" step="0.01" name="amount" placeholder="Enter your expense amount" required><br/>
+                <div class="form-group">
+                    <label for="amount">Amount ($)</label>
+                    <input type="number" class="form-control" id="amount" name="amount"
+                           min="0" step="0.01" placeholder="0.00" required>
+                    <small class="form-text text-muted">Enter the amount spent</small>
+                </div>
 
-      <!-- Expense Category -->
-      <label>Expense Category:</label>
-      <input name="category" placeholder="Enter your expense category" required><br/>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" class="form-control" id="category" name="category"
+                           placeholder="e.g. Food, Transportation" required>
+                    <small class="form-text text-muted">Categorize your expense</small>
+                </div>
 
-      <input class="btn btn-primary" type="submit" value="Add"><br/>
-    </form>
-  </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-danger btn-lg">
+                        <i class="fas fa-save mr-2"></i>Add Expense
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
